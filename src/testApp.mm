@@ -8,8 +8,6 @@ MyGuiView * myGuiViewController;
 
 /*
  TO DO
-    -Enable "Blur" effect
-    -Slight flash when saving an image
     -Enable masking via the contour lines
     -Enable color picker
     -Enable Invert selection?
@@ -107,7 +105,20 @@ void testApp::setup(){
     snapPhoto = false;
     flashCounter = 0;
     
-    modeChange= true;
+    modeChange= false;
+    //Init first mode
+    CurrentModeString = "Swipe for different modes";
+    mysterySwitch = true;
+    addBlend = false;
+    backSwitch = true;
+    BWSwitch = false;
+    motionDetect = false;
+    blurAmt = .5;
+    lineThick = .2;
+    threshold = 127;
+    mystery = .13;
+    mystery2= .9;
+
     
     initMotion();
     motionDetect = false;
@@ -116,7 +127,7 @@ void testApp::setup(){
     exposure = 80;
     camState = 1; //Switch to front camera first
     
-    addBlend = true;  
+    addBlend = false;  
     
     loc.x = 0;
     loc.y = ofGetHeight()/2;
@@ -135,6 +146,7 @@ void testApp::setup(){
     ofBackground(0, 0, 0);
     
     loadFade = 255;
+    CurrentModeString = "Swipe for different modes!";
 
 }
 
@@ -240,31 +252,33 @@ void testApp::draw(){
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
     }
-    
+
     ofPushMatrix(); //For proper rotation
     
     ofSetColor(255);
     
-    if (camState==0) {
-        camDeform.y=100;
+    
+    if (camState==0) { ///FRONT CAMERAAAAAA
         //FIX THESE OFFSETS, THEYRE TOTALLY OFF but its annoying to fix them
-        camWidth = vidGrabber.getWidth()-50;
-        if ([UIDevice currentDevice].orientation==3) {
-            camDeform.x=-50;
+        camWidth = vidGrabber.getWidth();
+        if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeLeft) {
+            camDeform.x=0;
             camDeform.y=0;
-            camWidth = vidGrabber.getWidth()+50;
+            camWidth = vidGrabber.getWidth()-0;
             camHeight = vidGrabber.getHeight();
+            ofRotateY(180);
             ofRotateZ(-180);
-            ofTranslate(-960, -640);
+            ofTranslate(0, -640);
         }
         
-        else if ([UIDevice currentDevice].orientation==4) {
-            camDeform.x=-50;
+        else if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeRight) {
+            camDeform.x=0;
             camDeform.y=0;
-            camWidth = vidGrabber.getWidth()+50;
-            camHeight = vidGrabber.getHeight();
+            camWidth = vidGrabber.getWidth()-0;
+            camHeight = vidGrabber.getHeight()+0;
+            ofRotateY(180);
             ofRotateZ(180);
-            ofTranslate(-960, -640);
+            ofTranslate(0, -640);
         }
 
     }
@@ -276,6 +290,10 @@ void testApp::draw(){
         camHeight = vidGrabber.getHeight();
     }
   
+
+    
+    //General line width setting...may be deprecated
+    ofSetLineWidth(ofMap(lineThick, 0.0,1.0,0.0,10.0));
     //Draw video background
     if(backSwitch){
         if (!BWSwitch) {
@@ -286,14 +304,13 @@ void testApp::draw(){
         }
     }
     
-    //General line width setting...may be deprecated
-    ofSetLineWidth(ofMap(lineThick, 0.0,1.0,0.0,10.0));
     
     //=============Presets============
     //Presets for each mode...check here if something is misbehaving
     if (modeChange){
         //Bubble
         if (counter==1) {
+            CurrentModeString = "         Bubble Eye";
             mysterySwitch = true;
             addBlend = false;
             backSwitch = true;
@@ -302,12 +319,13 @@ void testApp::draw(){
             blurAmt = .5;
             lineThick = .2;
             threshold = 127;
-            mystery = .13;
+            mystery = .1;
             mystery2= .9;
         }
         
         //Triangle
         if (counter==2) {
+            CurrentModeString = "        Crystal Eye";
             mysterySwitch = false;
             addBlend = false;
             backSwitch = true;
@@ -322,6 +340,7 @@ void testApp::draw(){
         
         //Dino
         if (counter==3) {
+            CurrentModeString = "      Dino Spikes Eye";
             mysterySwitch = true;
             addBlend = false;
             backSwitch = true;
@@ -336,6 +355,7 @@ void testApp::draw(){
         
         //Standard
         if (counter==4) {
+            CurrentModeString = "          Line Eye";
             mysterySwitch = true;
             addBlend = false;
             backSwitch = true;
@@ -349,7 +369,8 @@ void testApp::draw(){
         }
         
         //KlimtMode
-        if (counter==5) {
+        if (counter==5) { 
+            CurrentModeString = "         Klimt Eye";
             mysterySwitch = false;
             addBlend = false;
             backSwitch = true;
@@ -365,7 +386,8 @@ void testApp::draw(){
         //Make sure this gets reset so that it doesn't make values stick
         modeChange=false;
     }
-    
+
+
     if(snapSpecial){
         fboNew.begin();
     }
@@ -373,6 +395,7 @@ void testApp::draw(){
     //========BUBBLES=========
     if (counter ==1) {
         
+ 
         MysteryConnect = ofMap(mystery, 0.0, 1.0, 10, 60);
         MysteryConnect2 = ofMap(mystery2, 0.0, 1.0, 3, 15);
         ofSetCircleResolution(MysteryConnect2);
@@ -416,6 +439,7 @@ void testApp::draw(){
     
     //=========Spiked triangles=========
     if(counter==2){
+    
         for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
             ofFill();
             //ofBeginShape();
@@ -456,6 +480,7 @@ void testApp::draw(){
     
     //==========Dinosaur mode===========
     if(counter == 3){
+    
         
         if(mysterySwitch){
             MysteryConnect = ofMap(mystery, 0.0, 1.0, 5, 60);
@@ -520,6 +545,7 @@ void testApp::draw(){
     
     //========Regular drawing=========
     if(counter==4){
+     
             for(int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
                 //ofSetColor(color);
                 ofNoFill();
@@ -568,6 +594,7 @@ void testApp::draw(){
     
     //KlimtMode==============
     if (counter==5) {
+         
         for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
             for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 80)){
                 ofSetColor(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y)) ;
@@ -686,12 +713,19 @@ void testApp::draw(){
         
         ofSetColor(255, 255, 255);
         //if([UIDevice currentDevice].orientation==3 || [UIDevice currentDevice].orientation==0){
+        ofPushMatrix();
+            if(camState==0){ //If front camera
+            ofRotateY(180);
+            ofRotateZ(-180);
+            ofTranslate(0,-640);
+            }
             ofPushMatrix();
             ofRotateZ(90);
             ofTranslate(0, -1024);
             ofSetColor(255, 255, 255);
             fboNew.draw(0, 0); 
             ofPopMatrix();
+        ofPopMatrix();
         //}
         
         /*
@@ -707,8 +741,8 @@ void testApp::draw(){
         threshold = ofMap(threshCounter, 0, exposure, 0, 255);
         //Currently this is not actually getting every thresh level because its happening twice per frame
         if (threshCounter==exposure) {
-            ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();  
-            ofxiPhoneScreenGrab(delegate); 
+           // ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();  
+           // ofxiPhoneScreenGrab(delegate); 
             snapSpecial = false;
             fboNew.begin();  
             ofClear(0, 0, 0, 0);  
@@ -785,7 +819,7 @@ void testApp::draw(){
 
             //camswitchIcon.draw(35,-15,150,150);
             ofSetColor(255, 255, 255);
-            codePro.drawString("Swipe for different modes", 240,600);
+            codePro.drawString(CurrentModeString, 240,600);
             if (snapSpecial) {
                 ofFill();
                 ofSetColor(255, 255, 255,90);
@@ -819,7 +853,7 @@ void testApp::draw(){
             ofSetColor(255, 255, 255,100);
             //camswitchIcon.draw(35,-15,150,150);
             ofSetColor(255, 255, 255);
-            codePro.drawString("Swipe for different modes", 240,600);
+            codePro.drawString(CurrentModeString, 240,600);
             if (snapSpecial) {
                 ofFill();
                 ofSetColor(255, 255, 255,90);
@@ -853,7 +887,7 @@ void testApp::draw(){
 
             ofSetColor(255, 255, 255,255);
             
-            codePro.drawString("Swipe for different modes", 60,775);
+            codePro.drawString(CurrentModeString, 60,775);
             if (snapSpecial) {
                 ofFill();
                 ofSetColor(255, 255, 255,90);
@@ -880,6 +914,7 @@ void testApp::draw(){
     
     //RANDO-MIZER
     if(shufflin){
+        CurrentModeString = "        RANDOM EYE";
         counter = (int) ofRandom(1,6);
         mysterySwitch = (int) ofRandom(0,50)%2;
         //addBlend = (int) ofRandom(0,50)%2;
@@ -923,7 +958,7 @@ void testApp::touchDown(ofTouchEventArgs &touch){
             }
             
             if (touch.x>0 && touch.x<150 && touch.y>0 && touch.y<160){
-                //switchCamera();
+                switchCamera();
             }
             
             if (touch.x>810 && touch.x<920 && touch.y>20 && touch.y<200){
@@ -941,7 +976,7 @@ void testApp::touchDown(ofTouchEventArgs &touch){
             }
             
             if (touch.x>800 && touch.x<900 && touch.y>500 && touch.y<640){
-                //switchCamera(); //Currently dropped from functionality
+                switchCamera(); //Currently dropped from functionality
             }
             
             if (touch.x>25 && touch.x<250 && touch.y>500 && touch.y<640){

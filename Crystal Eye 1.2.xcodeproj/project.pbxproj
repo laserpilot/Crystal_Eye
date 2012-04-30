@@ -30,19 +30,16 @@
 		E61D073514995D90009C2269 /* MyGuiView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E61D073314995D90009C2269 /* MyGuiView.mm */; };
 		E6536F87145EF784008842D8 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E6536F86145EF784008842D8 /* Default.png */; };
 		E6536F8A145EF790008842D8 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E6536F89145EF790008842D8 /* Default@2x.png */; };
-		E6536F8C145EF795008842D8 /* appicon.png in Resources */ = {isa = PBXBuildFile; fileRef = E6536F8B145EF795008842D8 /* appicon.png */; };
 		E670B66714D9E12C00DF7931 /* CodeProBoldLC.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65714D9E12C00DF7931 /* CodeProBoldLC.otf */; };
 		E670B66814D9E12C00DF7931 /* CodeProLC.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65814D9E12C00DF7931 /* CodeProLC.otf */; };
 		E670B66914D9E12C00DF7931 /* CodeProLightLC.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65914D9E12C00DF7931 /* CodeProLightLC.otf */; };
 		E670B66A14D9E12C00DF7931 /* TJ-Evolette-A-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65A14D9E12C00DF7931 /* TJ-Evolette-A-Light.otf */; };
 		E670B66B14D9E12C00DF7931 /* TJ-Evolette-A-Normal.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65B14D9E12C00DF7931 /* TJ-Evolette-A-Normal.otf */; };
 		E670B66C14D9E12C00DF7931 /* TJ-Evolette-A-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65C14D9E12C00DF7931 /* TJ-Evolette-A-Thin.otf */; };
-		E670B66D14D9E12C00DF7931 /* camIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = E670B65E14D9E12C00DF7931 /* camIcon.png */; };
-		E670B66E14D9E12C00DF7931 /* camSpecialIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = E670B65F14D9E12C00DF7931 /* camSpecialIcon.png */; };
 		E670B66F14D9E12C00DF7931 /* fl_app_front_menu.png in Resources */ = {isa = PBXBuildFile; fileRef = E670B66014D9E12C00DF7931 /* fl_app_front_menu.png */; };
 		E670B67114D9E12C00DF7931 /* fl_app_menu_2_portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = E670B66214D9E12C00DF7931 /* fl_app_menu_2_portrait.png */; };
-		E670B67214D9E12C00DF7931 /* Gear.png in Resources */ = {isa = PBXBuildFile; fileRef = E670B66314D9E12C00DF7931 /* Gear.png */; };
-		E670B67314D9E12C00DF7931 /* Switching-ICON.png in Resources */ = {isa = PBXBuildFile; fileRef = E670B66414D9E12C00DF7931 /* Switching-ICON.png */; };
+		E68641C4154EFFA1002C8B46 /* CrystalEye57px.png in Resources */ = {isa = PBXBuildFile; fileRef = E68641C2154EFFA1002C8B46 /* CrystalEye57px.png */; };
+		E68641C5154EFFA1002C8B46 /* CrystalEye114px.png in Resources */ = {isa = PBXBuildFile; fileRef = E68641C3154EFFA1002C8B46 /* CrystalEye114px.png */; };
 		E6B69C0114CF53BE00FC3C6A /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = E6B69C0014CF53BE00FC3C6A /* white.png */; };
 		E6D548F214DB2C8C00CED64E /* loadScreen.png in Resources */ = {isa = PBXBuildFile; fileRef = E6D548F114DB2C8C00CED64E /* loadScreen.png */; };
 		E6DAF22D14C63CAF00813A0F /* ofxiPhoneTorch.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6DAF22C14C63CAF00813A0F /* ofxiPhoneTorch.mm */; };
@@ -107,20 +104,17 @@
 		E61D073314995D90009C2269 /* MyGuiView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyGuiView.mm; sourceTree = "<group>"; };
 		E6536F86145EF784008842D8 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E6536F89145EF790008842D8 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		E6536F8B145EF795008842D8 /* appicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = appicon.png; sourceTree = "<group>"; };
 		E670B65714D9E12C00DF7931 /* CodeProBoldLC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CodeProBoldLC.otf; sourceTree = "<group>"; };
 		E670B65814D9E12C00DF7931 /* CodeProLC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CodeProLC.otf; sourceTree = "<group>"; };
 		E670B65914D9E12C00DF7931 /* CodeProLightLC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CodeProLightLC.otf; sourceTree = "<group>"; };
 		E670B65A14D9E12C00DF7931 /* TJ-Evolette-A-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TJ-Evolette-A-Light.otf"; sourceTree = "<group>"; };
 		E670B65B14D9E12C00DF7931 /* TJ-Evolette-A-Normal.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TJ-Evolette-A-Normal.otf"; sourceTree = "<group>"; };
 		E670B65C14D9E12C00DF7931 /* TJ-Evolette-A-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TJ-Evolette-A-Thin.otf"; sourceTree = "<group>"; };
-		E670B65E14D9E12C00DF7931 /* camIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camIcon.png; sourceTree = "<group>"; };
-		E670B65F14D9E12C00DF7931 /* camSpecialIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camSpecialIcon.png; sourceTree = "<group>"; };
 		E670B66014D9E12C00DF7931 /* fl_app_front_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fl_app_front_menu.png; sourceTree = "<group>"; };
 		E670B66114D9E12C00DF7931 /* fl_app_menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fl_app_menu.png; sourceTree = "<group>"; };
 		E670B66214D9E12C00DF7931 /* fl_app_menu_2_portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fl_app_menu_2_portrait.png; sourceTree = "<group>"; };
-		E670B66314D9E12C00DF7931 /* Gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Gear.png; sourceTree = "<group>"; };
-		E670B66414D9E12C00DF7931 /* Switching-ICON.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Switching-ICON.png"; sourceTree = "<group>"; };
+		E68641C2154EFFA1002C8B46 /* CrystalEye57px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CrystalEye57px.png; sourceTree = "<group>"; };
+		E68641C3154EFFA1002C8B46 /* CrystalEye114px.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CrystalEye114px.png; sourceTree = "<group>"; };
 		E6B69C0014CF53BE00FC3C6A /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = white.png; sourceTree = "<group>"; };
 		E6D548F114DB2C8C00CED64E /* loadScreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loadScreen.png; sourceTree = "<group>"; };
 		E6DAF22B14C63CAF00813A0F /* ofxiPhoneTorch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ofxiPhoneTorch.h; path = ../../../addons/ofxiPhoneTorch/ofxiPhoneTorch.h; sourceTree = "<group>"; };
@@ -173,7 +167,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				E6536F8B145EF795008842D8 /* appicon.png */,
+				E68641C2154EFFA1002C8B46 /* CrystalEye57px.png */,
+				E68641C3154EFFA1002C8B46 /* CrystalEye114px.png */,
 				E6536F89145EF790008842D8 /* Default@2x.png */,
 				E6536F86145EF784008842D8 /* Default.png */,
 				E4D8936A11527B74007E1F53 /* src */,
@@ -302,13 +297,9 @@
 			isa = PBXGroup;
 			children = (
 				E6D548F114DB2C8C00CED64E /* loadScreen.png */,
-				E670B65E14D9E12C00DF7931 /* camIcon.png */,
-				E670B65F14D9E12C00DF7931 /* camSpecialIcon.png */,
 				E670B66014D9E12C00DF7931 /* fl_app_front_menu.png */,
 				E670B66114D9E12C00DF7931 /* fl_app_menu.png */,
 				E670B66214D9E12C00DF7931 /* fl_app_menu_2_portrait.png */,
-				E670B66314D9E12C00DF7931 /* Gear.png */,
-				E670B66414D9E12C00DF7931 /* Switching-ICON.png */,
 			);
 			path = images;
 			sourceTree = "<group>";
@@ -385,7 +376,7 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "opencvExample" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Crystal Eye 1.2" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -427,7 +418,6 @@
 			files = (
 				E6536F87145EF784008842D8 /* Default.png in Resources */,
 				E6536F8A145EF790008842D8 /* Default@2x.png in Resources */,
-				E6536F8C145EF795008842D8 /* appicon.png in Resources */,
 				E61D073414995D90009C2269 /* MyGuiView.xib in Resources */,
 				E6B69C0114CF53BE00FC3C6A /* white.png in Resources */,
 				E6F2600314D896B6006BC237 /* fl_app_menu.png in Resources */,
@@ -438,13 +428,11 @@
 				E670B66A14D9E12C00DF7931 /* TJ-Evolette-A-Light.otf in Resources */,
 				E670B66B14D9E12C00DF7931 /* TJ-Evolette-A-Normal.otf in Resources */,
 				E670B66C14D9E12C00DF7931 /* TJ-Evolette-A-Thin.otf in Resources */,
-				E670B66D14D9E12C00DF7931 /* camIcon.png in Resources */,
-				E670B66E14D9E12C00DF7931 /* camSpecialIcon.png in Resources */,
 				E670B66F14D9E12C00DF7931 /* fl_app_front_menu.png in Resources */,
 				E670B67114D9E12C00DF7931 /* fl_app_menu_2_portrait.png in Resources */,
-				E670B67214D9E12C00DF7931 /* Gear.png in Resources */,
-				E670B67314D9E12C00DF7931 /* Switching-ICON.png in Resources */,
 				E6D548F214DB2C8C00CED64E /* loadScreen.png in Resources */,
+				E68641C4154EFFA1002C8B46 /* CrystalEye57px.png in Resources */,
+				E68641C5154EFFA1002C8B46 /* CrystalEye114px.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -620,6 +608,8 @@
 		E6085A5214DC89BA003E86EC /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Blair Neal (242UN75KC5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Blair Neal (242UN75KC5)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iPhone_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
@@ -633,6 +623,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
+				PROVISIONING_PROFILE = "2E9EC1E1-2783-41A6-93DF-3911B236350F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2E9EC1E1-2783-41A6-93DF-3911B236350F";
 				SKIP_INSTALL = YES;
 			};
 			name = Distribution;
@@ -650,7 +642,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "opencvExample" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Crystal Eye 1.2" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

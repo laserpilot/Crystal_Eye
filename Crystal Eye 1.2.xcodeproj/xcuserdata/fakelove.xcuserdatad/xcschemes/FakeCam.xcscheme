@@ -16,16 +16,16 @@
                BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
                BuildableName = "FakeCam.app"
                BlueprintName = "FakeCam"
-               ReferencedContainer = "container:opencvExample.xcodeproj">
+               ReferencedContainer = "container:Crystal Eye 1.2.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      buildConfiguration = "Debug">
+      buildConfiguration = "Distribution">
       <Testables>
       </Testables>
       <MacroExpansion>
@@ -34,16 +34,17 @@
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
             BuildableName = "FakeCam.app"
             BlueprintName = "FakeCam"
-            ReferencedContainer = "container:opencvExample.xcodeproj">
+            ReferencedContainer = "container:Crystal Eye 1.2.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
+      buildConfiguration = "Distribution"
+      ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       enablesOpenGLESFrameCapture = "YES"
       allowLocationSimulation = "YES">
@@ -53,7 +54,7 @@
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
             BuildableName = "FakeCam.app"
             BlueprintName = "FakeCam"
-            ReferencedContainer = "container:opencvExample.xcodeproj">
+            ReferencedContainer = "container:Crystal Eye 1.2.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -63,7 +64,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Distribution"
       debugDocumentVersioning = "YES">
       <BuildableProductRunnable>
          <BuildableReference
@@ -71,15 +72,15 @@
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
             BuildableName = "FakeCam.app"
             BlueprintName = "FakeCam"
-            ReferencedContainer = "container:opencvExample.xcodeproj">
+            ReferencedContainer = "container:Crystal Eye 1.2.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Distribution">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Distribution"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

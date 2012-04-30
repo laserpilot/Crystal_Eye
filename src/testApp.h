@@ -140,6 +140,7 @@ class testApp : public ofxiPhoneApp{
         bool        modeChange;
     
         //For swiping gestures
+        string CurrentModeString;
         ofPoint     loc;
         ofPoint     compare;
         int         timer;
