@@ -134,12 +134,10 @@ void testApp::setup(){
     timer = ofGetElapsedTimeMillis();
     
     //Make sure device can even support flashlight
-    if (ofxiPhoneGetDeviceType()==OFXIPHONE_DEVICE_IPHONE) {
-        enableFlashlight = true;
-    }
-    else {
-        enableFlashlight = false;
-    }
+   
+    enableFlashlight = false;
+    flash=false;
+ 
     shufflin = false;
     
     ofEnableAlphaBlending();
@@ -147,6 +145,7 @@ void testApp::setup(){
     
     loadFade = 255;
     CurrentModeString = "Swipe for different modes!";
+    updateGUIvalues();
 
 }
 
@@ -231,12 +230,7 @@ void testApp::update(){
     ModColor.setHsb(blurAmt,255,255);
     
     if(enableFlashlight){
-        if (flash) {
-             flashlight.toggle(true);
-        }
-        else {
-             flashlight.toggle(false);
-        }
+        flashlight.toggle(flash);
        
     }
     
@@ -263,9 +257,9 @@ void testApp::draw(){
         camWidth = vidGrabber.getWidth();
         if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeLeft) {
             camDeform.x=0;
-            camDeform.y=0;
+            camDeform.y=100;
             camWidth = vidGrabber.getWidth()-0;
-            camHeight = vidGrabber.getHeight();
+            camHeight = vidGrabber.getHeight()-50;
             ofRotateY(180);
             ofRotateZ(-180);
             ofTranslate(0, -640);
@@ -273,11 +267,21 @@ void testApp::draw(){
         
         else if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeRight) {
             camDeform.x=0;
-            camDeform.y=0;
+            camDeform.y=100;
             camWidth = vidGrabber.getWidth()-0;
-            camHeight = vidGrabber.getHeight()+0;
+            camHeight = vidGrabber.getHeight()-50;
             ofRotateY(180);
             ofRotateZ(180);
+            ofTranslate(0, -640);
+        }
+        else if ([UIDevice currentDevice].orientation==UIDeviceOrientationPortrait) {
+            camDeform.x=0;
+            camDeform.y=100;
+            camWidth = vidGrabber.getWidth()-0;
+            camHeight = vidGrabber.getHeight()-50;
+            ofRotateY(0);
+            ofRotateZ(0);
+            ofRotateX(180);
             ofTranslate(0, -640);
         }
 
@@ -321,6 +325,7 @@ void testApp::draw(){
             threshold = 127;
             mystery = .1;
             mystery2= .9;
+            updateGUIvalues();
         }
         
         //Triangle
@@ -336,6 +341,7 @@ void testApp::draw(){
             threshold = 127;
             mystery = .1;
             mystery2=.5;
+            updateGUIvalues();
         }
         
         //Dino
@@ -351,6 +357,7 @@ void testApp::draw(){
             threshold = 127;
             mystery = .5;
             mystery2=.5;
+            updateGUIvalues();
         }
         
         //Standard
@@ -366,6 +373,7 @@ void testApp::draw(){
             threshold = 127;
             mystery = .2;
             mystery2=0;
+            updateGUIvalues();
         }
         
         //KlimtMode
@@ -381,6 +389,7 @@ void testApp::draw(){
             threshold = 127;
             mystery = .1;
             mystery2=.35;
+            updateGUIvalues();
         }
         
         //Make sure this gets reset so that it doesn't make values stick
@@ -719,6 +728,11 @@ void testApp::draw(){
             ofRotateZ(-180);
             ofTranslate(0,-640);
             }
+            if(camState==0 && [UIDevice currentDevice].orientation==UIDeviceOrientationPortrait){ //If front camera
+               // ofRotateY(180);
+                ofRotateX(0);
+                ofTranslate(0,0); //DONE FIXED>>LEAVE IT! 
+            }
             ofPushMatrix();
             ofRotateZ(90);
             ofTranslate(0, -1024);
@@ -741,8 +755,8 @@ void testApp::draw(){
         threshold = ofMap(threshCounter, 0, exposure, 0, 255);
         //Currently this is not actually getting every thresh level because its happening twice per frame
         if (threshCounter==exposure) {
-           // ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();  
-           // ofxiPhoneScreenGrab(delegate); 
+            ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();  
+            ofxiPhoneScreenGrab(delegate); 
             snapSpecial = false;
             fboNew.begin();  
             ofClear(0, 0, 0, 0);  
@@ -927,6 +941,7 @@ void testApp::draw(){
         mystery = ofRandom(0,1);
         mystery2= ofRandom(0,1);
         shufflin = false;
+        updateGUIvalues();
         
     }
     
@@ -960,6 +975,14 @@ void testApp::touchDown(ofTouchEventArgs &touch){
             if (touch.x>0 && touch.x<150 && touch.y>0 && touch.y<160){
                 switchCamera();
             }
+            /*if (touch.x>0 && touch.x<150 && touch.y>350 && touch.y<640){
+                if (flash) {
+                    flash=false;
+                }
+                else{
+                flash=true;
+                }
+            }*/
             
             if (touch.x>810 && touch.x<920 && touch.y>20 && touch.y<200){
                 if( myGuiViewController.view.hidden ){
@@ -1093,6 +1116,20 @@ void testApp::changeOrientation(int newOrientation){
             //ofxiPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_LEFT);
             break;
     }
+    
+}
+//--------------------------------------------------------------
+void testApp::updateGUIvalues(){
+    myGuiViewController.GUIbackground.on = backSwitch;
+    myGuiViewController.GUIblackwhite.on = BWSwitch;
+    myGuiViewController.GUImysterySw.on = mysterySwitch;
+    myGuiViewController.GUImotion.on = motionDetect;
+    myGuiViewController.GUIblend.on = addBlend;
+    myGuiViewController.GUIthresh.value = threshold/255;
+    myGuiViewController.GUIthickness.value = lineThick/10;
+    myGuiViewController.GUImystery.value = mystery;
+    myGuiViewController.GUImystery2.value = mystery2;
+   // myGuiViewController.GUIexposure.value = exposure;
     
 }
 

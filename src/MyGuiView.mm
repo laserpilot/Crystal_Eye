@@ -13,6 +13,8 @@
 
 @implementation MyGuiView
 
+@synthesize updateVals, GUIthickness, GUImystery, GUImystery2, GUIexposure, GUIthresh, GUIblend, GUImotion,GUImysterySw,GUIbackground,GUIblackwhite;
+
 // called automatically after the view is loaded, can be treated like the constructor or setup() of this class
 -(void)viewDidLoad {
 	myApp = (testApp*)ofGetAppPtr();
@@ -51,6 +53,7 @@
 -(void)setStatusString:(NSString *)trackStr{
 	displayText.text = trackStr;
 }
+//----------------------------------------------------------------
 
 //----------------------------------------------------------------
 -(void)setHelpString:(NSString *)trackStr{
@@ -112,7 +115,7 @@
 	
 	string statusStr = " Status: Mystery is " + ofToString(myApp->mystery);
 	[self setStatusString:ofxStringToNSString(statusStr)];
-	
+    
 }
 
 //----------------------------------------------------------------

@@ -30,6 +30,7 @@ class testApp : public ofxiPhoneApp{
     
         void changeOrientation(int newOrientation);
         void switchCamera();
+        void updateGUIvalues();
 
     
 		ofVideoGrabber 		vidGrabber;

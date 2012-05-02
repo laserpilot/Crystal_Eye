@@ -12,11 +12,36 @@
 @interface MyGuiView : UIViewController {
 	IBOutlet UILabel *displayText;
 	IBOutlet UILabel *helpText;
+    IBOutlet UISlider *GUIthickness;
+    IBOutlet UISlider  *GUImystery;
+    IBOutlet UISlider *GUImystery2;
+    IBOutlet UISlider *GUIexposure;
+    IBOutlet UISlider  *GUIthresh;
+    IBOutlet UISwitch *GUIbackground;
+    IBOutlet UISwitch *GUIblend;
+    IBOutlet UISwitch *GUImysterySw;
+    IBOutlet UISwitch *GUIblackwhite;
+    IBOutlet UISwitch *GUImotion;
+    
+    IBOutlet UISwitch *updateVals;
     
 	testApp *myApp;		// points to our instance of testApp
 }
 
+@property (nonatomic, retain) IBOutlet UISlider *GUIthickness; 
+@property (nonatomic, retain) IBOutlet UISlider *GUIthresh; 
+@property (nonatomic, retain) IBOutlet UISlider *GUImystery; 
+@property (nonatomic, retain) IBOutlet UISlider *GUImystery2; 
+@property (nonatomic, retain) IBOutlet UISlider *GUIexposure; 
+@property (nonatomic, retain) IBOutlet UISwitch *GUIbackground; 
+@property (nonatomic, retain) IBOutlet UISwitch *GUIblend; 
+@property (nonatomic, retain) IBOutlet UISwitch *GUImysterySw; 
+@property (nonatomic, retain) IBOutlet UISwitch *GUIblackwhite; 
+@property (nonatomic, retain) IBOutlet UISwitch *GUImotion; 
+@property (nonatomic, retain) IBOutlet UISwitch *updateVals; 
+
 -(void)setStatusString:(NSString *)trackStr;
+-(void)changeGuiVals:(id)sender;
 
 -(IBAction)adjustBlur:(id)sender;
 -(IBAction)adjustThick:(id)sender;
