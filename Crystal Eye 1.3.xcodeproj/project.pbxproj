@@ -30,6 +30,8 @@
 		E61D073514995D90009C2269 /* MyGuiView.mm in Sources */ = {isa = PBXBuildFile; fileRef = E61D073314995D90009C2269 /* MyGuiView.mm */; };
 		E6536F87145EF784008842D8 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = E6536F86145EF784008842D8 /* Default.png */; };
 		E6536F8A145EF790008842D8 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E6536F89145EF790008842D8 /* Default@2x.png */; };
+		E65B2F12156AC692006DD9B0 /* Blorp3.png in Resources */ = {isa = PBXBuildFile; fileRef = E65B2F10156AC692006DD9B0 /* Blorp3.png */; };
+		E65B2F13156AC692006DD9B0 /* Blorp6.png in Resources */ = {isa = PBXBuildFile; fileRef = E65B2F11156AC692006DD9B0 /* Blorp6.png */; };
 		E670B66714D9E12C00DF7931 /* CodeProBoldLC.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65714D9E12C00DF7931 /* CodeProBoldLC.otf */; };
 		E670B66814D9E12C00DF7931 /* CodeProLC.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65814D9E12C00DF7931 /* CodeProLC.otf */; };
 		E670B66914D9E12C00DF7931 /* CodeProLightLC.otf in Resources */ = {isa = PBXBuildFile; fileRef = E670B65914D9E12C00DF7931 /* CodeProLightLC.otf */; };
@@ -104,6 +106,8 @@
 		E61D073314995D90009C2269 /* MyGuiView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MyGuiView.mm; sourceTree = "<group>"; };
 		E6536F86145EF784008842D8 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		E6536F89145EF790008842D8 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		E65B2F10156AC692006DD9B0 /* Blorp3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Blorp3.png; sourceTree = "<group>"; };
+		E65B2F11156AC692006DD9B0 /* Blorp6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Blorp6.png; sourceTree = "<group>"; };
 		E670B65714D9E12C00DF7931 /* CodeProBoldLC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CodeProBoldLC.otf; sourceTree = "<group>"; };
 		E670B65814D9E12C00DF7931 /* CodeProLC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CodeProLC.otf; sourceTree = "<group>"; };
 		E670B65914D9E12C00DF7931 /* CodeProLightLC.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = CodeProLightLC.otf; sourceTree = "<group>"; };
@@ -296,6 +300,8 @@
 		E670B65D14D9E12C00DF7931 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				E65B2F10156AC692006DD9B0 /* Blorp3.png */,
+				E65B2F11156AC692006DD9B0 /* Blorp6.png */,
 				E6D548F114DB2C8C00CED64E /* loadScreen.png */,
 				E670B66014D9E12C00DF7931 /* fl_app_front_menu.png */,
 				E670B66114D9E12C00DF7931 /* fl_app_menu.png */,
@@ -376,7 +382,7 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Crystal Eye 1.2" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Crystal Eye 1.3" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -433,6 +439,8 @@
 				E6D548F214DB2C8C00CED64E /* loadScreen.png in Resources */,
 				E68641C4154EFFA1002C8B46 /* CrystalEye57px.png in Resources */,
 				E68641C5154EFFA1002C8B46 /* CrystalEye114px.png in Resources */,
+				E65B2F12156AC692006DD9B0 /* Blorp3.png in Resources */,
+				E65B2F13156AC692006DD9B0 /* Blorp6.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -508,8 +516,8 @@
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Fakelove Inc.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fakelove Inc.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Blair Neal (242UN75KC5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Blair Neal (242UN75KC5)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iPhone_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
@@ -523,8 +531,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "C02B930B-FDBA-40F5-B761-5B7A478A0342";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C02B930B-FDBA-40F5-B761-5B7A478A0342";
+				PROVISIONING_PROFILE = "2E9EC1E1-2783-41A6-93DF-3911B236350F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2E9EC1E1-2783-41A6-93DF-3911B236350F";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -612,8 +620,8 @@
 		E6085A5214DC89BA003E86EC /* Distribution */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Fakelove Inc.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fakelove Inc.";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Blair Neal (242UN75KC5)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Blair Neal (242UN75KC5)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = iPhone_Prefix.pch;
 				HEADER_SEARCH_PATHS = (
@@ -627,8 +635,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "${TARGET_NAME}";
-				PROVISIONING_PROFILE = "C02B930B-FDBA-40F5-B761-5B7A478A0342";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C02B930B-FDBA-40F5-B761-5B7A478A0342";
+				PROVISIONING_PROFILE = "2E9EC1E1-2783-41A6-93DF-3911B236350F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "2E9EC1E1-2783-41A6-93DF-3911B236350F";
 				SKIP_INSTALL = YES;
 			};
 			name = Distribution;
@@ -646,7 +654,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Crystal Eye 1.2" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Crystal Eye 1.3" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

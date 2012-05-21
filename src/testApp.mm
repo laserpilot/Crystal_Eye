@@ -66,6 +66,10 @@ void testApp::setup(){
     fullGui.loadImage("images/fl_app_front_menu.png");
     fullGuiPortrait.loadImage("images/fl_app_menu_2_portrait.png");
     loadScreen.loadImage("images/loadScreenland.png");
+    
+    sphere_oid.loadImage("images/Blorp3.png");
+    gradSquare.loadImage("images/Blorp6.png");
+    
     hideGui = false;
     
     //FONTS
@@ -253,7 +257,6 @@ void testApp::draw(){
     
     
     if (camState==0) { ///FRONT CAMERAAAAAA
-        //FIX THESE OFFSETS, THEYRE TOTALLY OFF but its annoying to fix them
         camWidth = vidGrabber.getWidth();
         if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeLeft) {
             camDeform.x=0;
@@ -379,6 +382,21 @@ void testApp::draw(){
         //KlimtMode
         if (counter==5) { 
             CurrentModeString = "         Klimt Eye";
+            mysterySwitch = false;
+            addBlend = false;
+            backSwitch = true;
+            BWSwitch = false;
+            motionDetect = false;
+            blurAmt = .5;
+            lineThick = .5;
+            threshold = 127;
+            mystery = .1;
+            mystery2=.35;
+            updateGUIvalues();
+        }
+        
+        if (counter==6) { 
+            CurrentModeString = "         Bubble Bath";
             mysterySwitch = false;
             addBlend = false;
             backSwitch = true;
@@ -609,16 +627,44 @@ void testApp::draw(){
                 ofSetColor(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y)) ;
                 mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
                 mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+                if (!mysterySwitch) {
+                    ofFill();
+                    int randomRectX= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
+                    
+                    //int randomRectY= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
+                    ofRect(mapPt, randomRectX,randomRectX);
+                    ofNoFill();
+                    ofSetLineWidth(.5);
+                    ofSetColor(0, 0, 0);
+                    ofRect(mapPt, randomRectX,randomRectX);
+                }
+                else {
+                    ofFill();
+                    int randomRectX= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
+                    gradSquare.draw(mapPt, randomRectX,randomRectX);
+                    ofNoFill();
+                    ofSetLineWidth(.5);
+                    ofSetColor(0, 0, 0);
+                    ofRect(mapPt, randomRectX,randomRectX);
+                }
                 
-                ofFill();
+            }
+        }
+    }
+    //3d Spheremode==============
+    if (counter==6) {
+        
+        for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
+            for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 80)){
+                ofSetColor(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y)) ;
+                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
+                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+                
+             
                 int randomRectX= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
                 
                 //int randomRectY= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
-                ofRect(mapPt, randomRectX,randomRectX);
-                ofNoFill();
-                ofSetLineWidth(.5);
-                ofSetColor(0, 0, 0);
-                ofRect(mapPt, randomRectX,randomRectX);
+                sphere_oid.draw(mapPt, randomRectX,randomRectX);
             }
         }
     }
@@ -929,7 +975,7 @@ void testApp::draw(){
     //RANDO-MIZER
     if(shufflin){
         CurrentModeString = "        RANDOM EYE";
-        counter = (int) ofRandom(1,6);
+        counter = (int) ofRandom(1,7);
         mysterySwitch = (int) ofRandom(0,50)%2;
         //addBlend = (int) ofRandom(0,50)%2;
         //backSwitch = (int) ofRandom(0,1);
@@ -1067,7 +1113,7 @@ void testApp::touchMoved(ofTouchEventArgs &touch){
     if(loc.x - compare.x > 0){        
         if((loc.x - compare.x) > 100){
             timer = ofGetElapsedTimeMillis();
-            if(counter < 5){
+            if(counter < 6){
                 counter++;
                 modeChange = true;
             }

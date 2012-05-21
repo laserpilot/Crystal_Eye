@@ -150,6 +150,10 @@ class testApp : public ofxiPhoneApp{
         ofImage     numbers[4];
         ofVec2f     a, b, tangent, normal, mappedA, mappedB;
 
-
+        //For 3d sphere mode
+        ofImage sphere_oid;
+    
+        //For 3d cube klimt
+        ofImage gradSquare;
 
 };
