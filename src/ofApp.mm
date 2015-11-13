@@ -45,7 +45,7 @@ void ofApp::setup(){
     [ofxiOSGetGLParentView() addSubview:myGuiViewController.view];
 
   
-    myGuiViewController.view.hidden = NO;
+    myGuiViewController.view.hidden = YES;
     //ofSetFrameRate(30);
     
     // OF specific stuff
@@ -330,7 +330,7 @@ void ofApp::giganticDraw(){
             vidGrabber.draw(0,0, vidGrabber.getWidth()*2,vidGrabber.getHeight()*2);
         }
         else {
-            blackwhiteImage.draw(0,0, ofGetWidth(),ofGetHeight());
+            blackwhiteImage.draw(0,0, vidGrabber.getWidth()*2,vidGrabber.getHeight()*2);
         }
     }
     
@@ -899,7 +899,7 @@ void ofApp::giganticDraw(){
             ofFill();
             ofEnableAlphaBlending();
             ofSetColor(255, 255, 255,255);
-            fullGui.draw(0,0,ofGetWidth(),ofGetHeight());
+            fullGui.draw(0,0,960,640);
             
             //camswitchIcon.draw(35,-15,150,150);
             ofSetColor(255, 255, 255);
@@ -932,7 +932,7 @@ void ofApp::giganticDraw(){
             ofEnableAlphaBlending();
             ofSetColor(255, 255, 255,255);
             
-            fullGui.draw(0,0,ofGetWidth(),ofGetHeight());
+            fullGui.draw(0,0,960,640);
             
             ofSetColor(255, 255, 255,100);
             //camswitchIcon.draw(35,-15,150,150);
@@ -990,7 +990,7 @@ void ofApp::giganticDraw(){
             }
             ofPopMatrix();
             ofSetColor(255, 255, 255,255);
-            fullGuiPortrait.draw(0,0,ofGetWidth(),ofGetHeight());
+            fullGuiPortrait.draw(0,0,960,640);
             //cout << "Portrait case"<<endl;
         }
         
