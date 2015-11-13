@@ -17,7 +17,7 @@
 
 // called automatically after the view is loaded, can be treated like the constructor or setup() of this class
 -(void)viewDidLoad {
-	myApp = (testApp*)ofGetAppPtr();
+	myApp = (ofApp*)ofGetAppPtr();
     if([UIDevice currentDevice].orientation == 0 || 
        [UIDevice currentDevice].orientation == 1 || 
        [UIDevice currentDevice].orientation == 2 ||

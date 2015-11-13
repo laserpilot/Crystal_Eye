@@ -1,16 +1,10 @@
 #pragma once
 
-
-#include "ofMain.h"
-#include "ofxiPhone.h"
-#include "ofxiPhoneExtras.h"
-
-
-//ON IPHONE NOTE INCLUDE THIS BEFORE ANYTHING ELSE
+#include "ofxiOS.h"
 #include "ofxOpenCv.h"
-#include "ofxiPhoneTorch.h"
 
-class testApp : public ofxiPhoneApp{
+
+class ofApp : public ofxiOSApp{
 	
 	public:
 		
@@ -31,6 +25,7 @@ class testApp : public ofxiPhoneApp{
         void changeOrientation(int newOrientation);
         void switchCamera();
         void updateGUIvalues();
+        void giganticDraw();
 
     
 		ofVideoGrabber 		vidGrabber;
@@ -52,7 +47,7 @@ class testApp : public ofxiPhoneApp{
     
         ofImage colorHold; //For grabbing color values
     
-        ofxiPhoneTorch      flashlight;
+        //ofxiPhoneTorch      flashlight;
         bool                enableFlashlight;
         bool                flash;
     
@@ -155,5 +150,7 @@ class testApp : public ofxiPhoneApp{
     
         //For 3d cube klimt
         ofImage gradSquare;
+    
+    bool initialLoad;
 
 };

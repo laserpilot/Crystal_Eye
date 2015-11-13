@@ -1,4 +1,4 @@
-#include "testApp.h"
+#include "ofApp.h"
 #include "MyGuiView.h"
 
 //warning video player doesn't currently work - use live video only
@@ -31,25 +31,27 @@ MyGuiView * myGuiViewController;
 
 
 //--------------------------------------------------------------
-void testApp::setup(){	
+void ofApp::setup(){	
     
     //Iphone Specific setup
-	ofxiPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_LEFT);
+
+	ofSetOrientation(OF_ORIENTATION_90_LEFT);
     
     [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 
     ofRegisterTouchEvents(this);
 
     myGuiViewController	= [[MyGuiView alloc] initWithNibName:@"MyGuiView" bundle:nil];
-	[ofxiPhoneGetUIWindow() addSubview:myGuiViewController.view];
-    
-    myGuiViewController.view.hidden = YES;
-    ofSetFrameRate(30);
+    [ofxiOSGetGLParentView() addSubview:myGuiViewController.view];
+
+  
+    myGuiViewController.view.hidden = NO;
+    //ofSetFrameRate(30);
     
     // OF specific stuff
     vidGrabber.setVerbose(true);
     vidGrabber.setDeviceID(0); //Back camera first
-    vidGrabber.initGrabber(480,320); //Available resolutions: 
+    vidGrabber.setup(480*2,320*2); //Available resolutions:
     vidGrabber.listDevices();
     camWidth = vidGrabber.getWidth();
     camHeight = vidGrabber.getHeight();
@@ -59,26 +61,26 @@ void testApp::setup(){
     blackwhiteImage.allocate(camWidth, camHeight);
 
     //Image Loading
-    snapIcon.loadImage("images/camIcon.png");
-    camswitchIcon.loadImage("images/Switching-ICON.png");
-    settingsGear.loadImage("images/Gear.png");
-    specialSnap.loadImage("images/camSpecialIcon.png");
-    fullGui.loadImage("images/fl_app_front_menu.png");
-    fullGuiPortrait.loadImage("images/fl_app_menu_2_portrait.png");
-    loadScreen.loadImage("images/loadScreenland.png");
+    snapIcon.load("images/camIcon.png");
+    camswitchIcon.load("images/Switching-ICON.png");
+    settingsGear.load("images/Gear.png");
+    specialSnap.load("images/camSpecialIcon.png");
+    fullGui.load("images/fl_app_front_menu.png");
+    fullGuiPortrait.load("images/fl_app_menu_2_portrait.png");
+    loadScreen.load("images/loadScreenland.png");
     
-    sphere_oid.loadImage("images/Blorp3.png");
-    gradSquare.loadImage("images/Blorp6.png");
+    sphere_oid.load("images/Blorp3.png");
+    gradSquare.load("images/Blorp6.png");
     
     hideGui = false;
     
     //FONTS
-	ofTrueTypeFont::setGlobalDpi(72);
+	//ofTrueTypeFont::setGlobalDpi(72);
     
-	codePro.loadFont("fonts/TJ-Evolette-A-Light.otf", 35, true, true);
+	codePro.load("fonts/TJ-Evolette-A-Light.otf", 35, true, true);
 	codePro.setLineHeight(35.0f);
 	codePro.setLetterSpacing(1.037);
-    codeProLight.loadFont("fonts/CodeProLightLC.otf", 35, true, true);
+    codeProLight.load("fonts/CodeProLightLC.otf", 35, true, true);
 	codeProLight.setLineHeight(35.0f);
 	codeProLight.setLetterSpacing(1.037);
     
@@ -87,15 +89,11 @@ void testApp::setup(){
     settings.width = 1024;    
     settings.height = 1024;    
     settings.internalformat = GL_RGBA;    
-    settings.numSamples = 0;    
-    settings.useDepth = false;    
-    settings.useStencil = false; 
+    //settings.numSamples = 0;
+    //settings.useDepth = false;
+    //settings.useStencil = false;
     
-    fboNew.allocate(settings);
-    
-    fboNew.begin();  
-    ofClear(0, 0, 0, 0);  
-    fboNew.end();
+    fboNew.allocate(1024,1024,GL_RGB);
     
     //App variable setting
     counter = 1;
@@ -139,21 +137,21 @@ void testApp::setup(){
     
     //Make sure device can even support flashlight
    
-    enableFlashlight = false;
     flash=false;
  
     shufflin = false;
     
-    ofEnableAlphaBlending();
+    //ofEnableAlphaBlending();
     ofBackground(0, 0, 0);
     
     loadFade = 255;
     CurrentModeString = "Swipe for different modes!";
     updateGUIvalues();
-
+ 
+    initialLoad = true;
 }
 
-void testApp :: initMotion()
+void ofApp :: initMotion()
 {
 	cameraGrayPrevImage.allocate( camWidth, camHeight );
 	cameraGrayDiffImage.allocate( camWidth, camHeight );
@@ -164,8 +162,7 @@ void testApp :: initMotion()
 } 
 
 //--------------------------------------------------------------
-void testApp::update(){
-	ofBackground(0,0,0);
+void ofApp::update(){
  
     
     //Call to function to rotate the views - FIX GLITCH WHEN NEW ROTATION HAPPENS
@@ -180,7 +177,7 @@ void testApp::update(){
 
     bool bNewFrame = false;
     
-    vidGrabber.grabFrame();
+    vidGrabber.update();
     bNewFrame = vidGrabber.isFrameNew();
    
     if (motionDetect) {
@@ -233,24 +230,42 @@ void testApp::update(){
     ModColor.setHue(blurAmt);
     ModColor.setHsb(blurAmt,255,255);
     
-    if(enableFlashlight){
-        flashlight.toggle(flash);
-       
-    }
-    
 
     
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){	
+void ofApp::draw(){	
 
+    ofBackground(0,0,0);
+    if(initialLoad){
+        initialLoad = false;
+    fboNew.begin();
+    ofClear(0, 0, 0, 0);
+    fboNew.end();
+    }
+    
+    giganticDraw();
+    
+    
+    //ofSetColor(255, 0, 0);
+    //ofDrawRectangle(500*sin(ofGetElapsedTimef()),200*sin(0.7*ofGetElapsedTimef()),400,400);
+    
+    //ofDrawBitmapStringHighlight("Width: " + ofToString(ofGetWidth()) + " Height: " + ofToString(ofGetHeight()), 200,200);
+    //cout<<ofGetWidth()<<endl;
+    //cout<<ofGetHeight()<<endl;
+}
+
+void ofApp::giganticDraw(){
+    
+    //Holy shit - this function is godawful - shame on me in 2012 - this needs to be broken out to so many classes and functions
+    
     if (addBlend) {
         //Additive blending
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE);
     }
-
+    
     ofPushMatrix(); //For proper rotation
     
     ofSetColor(255);
@@ -259,6 +274,7 @@ void testApp::draw(){
     if (camState==0) { ///FRONT CAMERAAAAAA
         camWidth = vidGrabber.getWidth();
         if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeLeft) {
+            /*
             camDeform.x=0;
             camDeform.y=100;
             camWidth = vidGrabber.getWidth()-0;
@@ -266,6 +282,13 @@ void testApp::draw(){
             ofRotateY(180);
             ofRotateZ(-180);
             ofTranslate(0, -640);
+             */
+            camDeform = ofPoint(0,0);
+            camWidth = vidGrabber.getWidth();
+            camHeight = vidGrabber.getHeight();
+            ofRotateY(180);
+            ofRotateZ(-180);
+            ofTranslate(0,-640);
         }
         
         else if ([UIDevice currentDevice].orientation==UIDeviceOrientationLandscapeRight) {
@@ -287,7 +310,7 @@ void testApp::draw(){
             ofRotateX(180);
             ofTranslate(0, -640);
         }
-
+        
     }
     else {
         //Reset for back camera
@@ -296,15 +319,15 @@ void testApp::draw(){
         camWidth = vidGrabber.getWidth();
         camHeight = vidGrabber.getHeight();
     }
-  
-
+    
+    
     
     //General line width setting...may be deprecated
     ofSetLineWidth(ofMap(lineThick, 0.0,1.0,0.0,10.0));
     //Draw video background
     if(backSwitch){
         if (!BWSwitch) {
-            vidGrabber.draw(0,0, (camDeform.x+ofGetWidth()),(camDeform.y+ofGetHeight()));
+            vidGrabber.draw(0,0, vidGrabber.getWidth()*2,vidGrabber.getHeight()*2);
         }
         else {
             blackwhiteImage.draw(0,0, ofGetWidth(),ofGetHeight());
@@ -349,7 +372,7 @@ void testApp::draw(){
         
         //Dino
         if (counter==3) {
-            CurrentModeString = "      Dino Spikes Eye";
+            CurrentModeString = "      Spiky Eye";
             mysterySwitch = true;
             addBlend = false;
             backSwitch = true;
@@ -380,7 +403,7 @@ void testApp::draw(){
         }
         
         //KlimtMode
-        if (counter==5) { 
+        if (counter==5) {
             CurrentModeString = "         Klimt Eye";
             mysterySwitch = false;
             addBlend = false;
@@ -395,7 +418,7 @@ void testApp::draw(){
             updateGUIvalues();
         }
         
-        if (counter==6) { 
+        if (counter==6) {
             CurrentModeString = "         Bubble Bath";
             mysterySwitch = false;
             addBlend = false;
@@ -413,29 +436,30 @@ void testApp::draw(){
         //Make sure this gets reset so that it doesn't make values stick
         modeChange=false;
     }
-
-
+    
+    
     if(snapSpecial){
         fboNew.begin();
     }
     
+    ofPoint mapResolution = ofPoint(camWidth*2, camHeight*2);
     //========BUBBLES=========
     if (counter ==1) {
         
- 
+        
         MysteryConnect = ofMap(mystery, 0.0, 1.0, 10, 60);
         MysteryConnect2 = ofMap(mystery2, 0.0, 1.0, 3, 15);
         ofSetCircleResolution(MysteryConnect2);
         
         for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
-         
+            
             ofBeginShape();
             for( int k=0; k<contourFinder.blobs[i].nPts; k+=5){
-                mapPt.x=ofMap(contourFinder.blobs[i].pts[k].x,0,camWidth,0,ofGetWidth());
-                mapPt.y=ofMap(contourFinder.blobs[i].pts[k].y,0,camHeight,0,ofGetHeight());
+                mapPt.x=ofMap(contourFinder.blobs[i].pts[k].x,0,camWidth,0,mapResolution.x);
+                mapPt.y=ofMap(contourFinder.blobs[i].pts[k].y,0,camHeight,0,mapResolution.y);
                 ofVertex( mapPt.x, mapPt.y );
-                mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,ofGetWidth());
-                mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight());
+                mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,mapResolution.x);
+                mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,mapResolution.y);
                 
                 //ofSetColor(255, 255, 255);
                 //ofVertex(mapPt.x, mapPt.y);
@@ -448,7 +472,7 @@ void testApp::draw(){
                 
                 // ofCircle(mapPt.x, mapPt.y, ofRandom(5,18));
                 ofFill();
-                ofCircle(mapPt.x, mapPt.y, ofRandom(5,MysteryConnect));
+                ofDrawCircle(mapPt.x, mapPt.y, ofRandom(5,MysteryConnect));
                 if (!mysterySwitch) {
                     ofFill();
                 }
@@ -459,55 +483,55 @@ void testApp::draw(){
                 //ofCircle(mapCent.x, mapCent.y, 10);
                 //ofSetColor(255, 255, 255,200);
             }
-            ofEndShape(); 
+            ofEndShape();
         }
         
     }
     
     //=========Spiked triangles=========
     if(counter==2){
-    
+        
         for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
             ofFill();
             //ofBeginShape();
             for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 20) ) {
-                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,mapResolution.x);
+                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,mapResolution.y);
                 
-                nextMappedPt.x = ofMap(contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].x,0,camWidth,0,ofGetWidth());
-                nextMappedPt.y = ofMap(contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].y,0,camHeight,0,ofGetHeight());
-                                
-                mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,ofGetWidth());
-                mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight());
+                nextMappedPt.x = ofMap(contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].x,0,camWidth,0,mapResolution.x);
+                nextMappedPt.y = ofMap(contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].y,0,camHeight,0,mapResolution.y);
+                
+                mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,mapResolution.x);
+                mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,mapResolution.y);
                 
                 /*
-                ofSetColor(ofMap(j, 0, contourFinder.blobs[i].nPts, 0, 255), 
-                           ofMap(j, 0, contourFinder.blobs[i].nPts, 60, 255), 
-                           ofMap(j, 0, contourFinder.blobs[i].nPts, 127, 255));
-                */
+                 ofSetColor(ofMap(j, 0, contourFinder.blobs[i].nPts, 0, 255),
+                 ofMap(j, 0, contourFinder.blobs[i].nPts, 60, 255),
+                 ofMap(j, 0, contourFinder.blobs[i].nPts, 127, 255));
+                 */
                 ofFloatColor color1;
                 color1=colorHold.getColor(contourFinder.blobs[i].pts[j].x,contourFinder.blobs[i].pts[j].y);
                 ofSetColor(color1);
-                ofTriangle(mapPt.x, mapPt.y, nextMappedPt.x, nextMappedPt.y, mapCent.x, mapCent.y);
+                ofDrawTriangle(mapPt.x, mapPt.y, nextMappedPt.x, nextMappedPt.y, mapCent.x, mapCent.y);
                 
                 /* EXPERIMENTAL, REQUIRES LOTS OF OF CORE MODIFICATIONS
-                ofFloatColor color1;
-                color1=colorHold.getColor(contourFinder.blobs[i].pts[j].x,contourFinder.blobs[i].pts[j].y);
-                ofFloatColor color2;
-                color2=colorHold.getColor(contourFinder.blobs[i].centroid.x,contourFinder.blobs[i].centroid.y);
-                ofFloatColor color3;
-                color3=colorHold.getColor(contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].x,contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].y);
-
-                ofColorTriangle(mapPt.x, mapPt.y, 0.0, mapCent.x, mapCent.y, 0.0, nextMappedPt.x, nextMappedPt.y, 0.0, color1, color2, color3);
+                 ofFloatColor color1;
+                 color1=colorHold.getColor(contourFinder.blobs[i].pts[j].x,contourFinder.blobs[i].pts[j].y);
+                 ofFloatColor color2;
+                 color2=colorHold.getColor(contourFinder.blobs[i].centroid.x,contourFinder.blobs[i].centroid.y);
+                 ofFloatColor color3;
+                 color3=colorHold.getColor(contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].x,contourFinder.blobs[i].pts[ofClamp(j+10,0,contourFinder.blobs[i].nPts-10) ].y);
+                 
+                 ofColorTriangle(mapPt.x, mapPt.y, 0.0, mapCent.x, mapCent.y, 0.0, nextMappedPt.x, nextMappedPt.y, 0.0, color1, color2, color3);
                  */
-            }            
+            }
             //ofSetColor(255,255,255);
         }
     }
     
     //==========Dinosaur mode===========
     if(counter == 3){
-    
+        
         
         if(mysterySwitch){
             MysteryConnect = ofMap(mystery, 0.0, 1.0, 5, 60);
@@ -519,10 +543,10 @@ void testApp::draw(){
                 for( int j = 0; j < contourFinder.blobs[i].nPts - stepSize; j += stepSize ) {
                     a = contourFinder.blobs[i].pts[j];
                     b = contourFinder.blobs[i].pts[j + stepSize];
-                    mappedA.x = ofMap(a.x, 0, camWidth, 0, ofGetWidth());
-                    mappedA.y = ofMap(a.y, 0, camHeight, 0, ofGetHeight());
-                    mappedB.x = ofMap(b.x, 0, camWidth, 0, ofGetWidth());
-                    mappedB.y = ofMap(b.y, 0, camHeight, 0, ofGetHeight());
+                    mappedA.x = ofMap(a.x, 0, camWidth, 0, mapResolution.x);
+                    mappedA.y = ofMap(a.y, 0, camHeight, 0, mapResolution.y);
+                    mappedB.x = ofMap(b.x, 0, camWidth, 0, mapResolution.x);
+                    mappedB.y = ofMap(b.y, 0, camHeight, 0, mapResolution.y);
                     tangent = mappedB - mappedA;
                     normal = tangent.getRotated(90);
                     normal.normalize();
@@ -534,7 +558,7 @@ void testApp::draw(){
                     color.set(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y));
                 }
                 ofSetColor(color);
-                mesh.draw();	
+                mesh.draw();
             }
         }
         
@@ -549,10 +573,10 @@ void testApp::draw(){
                 for( int j = 0; j < contourFinder.blobs[i].nPts - stepSize; j += stepSize ) {
                     a = contourFinder.blobs[i].pts[j];
                     b = contourFinder.blobs[i].pts[j + stepSize];
-                    mappedA.x = ofMap(a.x, 0,camWidth, 0, ofGetWidth());
-                    mappedA.y = ofMap(a.y, 0, camHeight, 0, ofGetHeight());
-                    mappedB.x = ofMap(b.x, 0, camWidth, 0, ofGetWidth());
-                    mappedB.y = ofMap(b.y, 0, camHeight, 0, ofGetHeight());
+                    mappedA.x = ofMap(a.x, 0, camWidth, 0, mapResolution.x);
+                    mappedA.y = ofMap(a.y, 0, camHeight, 0, mapResolution.y);
+                    mappedB.x = ofMap(b.x, 0, camWidth, 0, mapResolution.x);
+                    mappedB.y = ofMap(b.y, 0, camHeight, 0, mapResolution.y);
                     tangent = mappedB - mappedA;
                     normal = tangent.getRotated(90);
                     normal.normalize();
@@ -567,76 +591,76 @@ void testApp::draw(){
                 ofEndShape();
             }
         }
-    
+        
     }
     
     //========Regular drawing=========
     if(counter==4){
-     
-            for(int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
-                //ofSetColor(color);
-                ofNoFill();
-                ofBeginShape();
-                for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 20) ) {
-                    mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                    mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
-                    ofVertex(mapPt);
-                    
-                    //Draw connections to center - OPTIONAL
-                    //ofSetLineWidth(ofMap(connectDist [i][j], 0, 300, .1, 7));
-                    if(mysterySwitch){
-                        mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,ofGetWidth());
-                        mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight());
-                        int centDist;
-                        centDist = ofDist(mapPt.x,mapPt.y, mapCent.x,mapCent.y);
-                        ofSetLineWidth(ofMap(centDist, 0, 400, .03, 2.5));
-                        color.set(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y));
-                        ofSetColor(color);
-                        ofLine(mapPt.x,
-                               mapPt.y,
-                               mapCent.x,
-                               mapCent.y
-                               );
-                    }
-                }
+        
+        for(int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
+            //ofSetColor(color);
+            ofNoFill();
+            ofBeginShape();
+            for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 20) ) {
+                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,mapResolution.x);
+                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,mapResolution.y);
+                ofVertex(mapPt);
                 
-                //ExtraSketches
-                if (mystery2>0) {    
-                    ofSetLineWidth(ofMap(lineThick, 0.0, 1.0, 0.0, 3.0));
-                    for (int k = 1; k<ofMap(mystery2, 0.0, 1.0, 1, 30); k++) {
-                        //color.setHsb(i*k*7, 255, 255);
-                        ofSetColor(color);
-                        for( int j=0; j<contourFinder.blobs[i].nPts; j+=k*4 ) {
-                            mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                            mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
-                            ofVertex( mapPt.x, mapPt.y );
-                        }
-                    }
+                //Draw connections to center - OPTIONAL
+                //ofSetLineWidth(ofMap(connectDist [i][j], 0, 300, .1, 7));
+                if(mysterySwitch){
+                    mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,mapResolution.x);
+                    mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,mapResolution.y);
+                    int centDist;
+                    centDist = ofDist(mapPt.x,mapPt.y, mapCent.x,mapCent.y);
+                    ofSetLineWidth(ofMap(centDist, 0, 400, .03, 2.5));
+                    color.set(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y));
+                    ofSetColor(color);
+                    ofDrawLine(mapPt.x,
+                           mapPt.y,
+                           mapCent.x,
+                           mapCent.y
+                           );
                 }
-            ofSetLineWidth(ofMap(lineThick, 0.0, 1.0, 0.0, 10.0));
-            ofEndShape();  
             }
-                
+            
+            //ExtraSketches
+            if (mystery2>0) {
+                ofSetLineWidth(ofMap(lineThick, 0.0, 1.0, 0.0, 3.0));
+                for (int k = 1; k<ofMap(mystery2, 0.0, 1.0, 1, 30); k++) {
+                    //color.setHsb(i*k*7, 255, 255);
+                    ofSetColor(color);
+                    for( int j=0; j<contourFinder.blobs[i].nPts; j+=k*4 ) {
+                        mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,mapResolution.x);
+                        mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,mapResolution.y);
+                        ofVertex( mapPt.x, mapPt.y );
+                    }
+                }
+            }
+            ofSetLineWidth(ofMap(lineThick, 0.0, 1.0, 0.0, 10.0));
+            ofEndShape();
+        }
+        
     }
     
     //KlimtMode==============
     if (counter==5) {
-         
+        
         for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
             for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 80)){
                 ofSetColor(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y)) ;
-                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,mapResolution.x);
+                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,mapResolution.y);
                 if (!mysterySwitch) {
                     ofFill();
                     int randomRectX= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
                     
                     //int randomRectY= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
-                    ofRect(mapPt, randomRectX,randomRectX);
+                    ofDrawRectangle(mapPt, randomRectX,randomRectX);
                     ofNoFill();
                     ofSetLineWidth(.5);
                     ofSetColor(0, 0, 0);
-                    ofRect(mapPt, randomRectX,randomRectX);
+                    ofDrawRectangle(mapPt, randomRectX,randomRectX);
                 }
                 else {
                     ofFill();
@@ -645,7 +669,7 @@ void testApp::draw(){
                     ofNoFill();
                     ofSetLineWidth(.5);
                     ofSetColor(0, 0, 0);
-                    ofRect(mapPt, randomRectX,randomRectX);
+                    ofDrawRectangle(mapPt, randomRectX,randomRectX);
                 }
                 
             }
@@ -657,10 +681,10 @@ void testApp::draw(){
         for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
             for( int j=0; j<contourFinder.blobs[i].nPts; j=j+ofMap(mystery, 0, 1, 1, 80)){
                 ofSetColor(colorHold.getColor(contourFinder.blobs[i].pts[j].x, contourFinder.blobs[i].pts[j].y)) ;
-                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,mapResolution.x);
+                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,mapResolution.y);
                 
-             
+                
                 int randomRectX= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
                 
                 //int randomRectY= ofRandom(1,ofMap(mystery2, 0, 1, 1, 80));
@@ -672,86 +696,86 @@ void testApp::draw(){
     
     /*
      EASTER EGG MODES?
-    //Color blobs
-    if(counter==5){
-        for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
-            ofNoFill();
-            ofSetLineWidth(lineThick);
-            ofBeginShape();
-            for( int j=0; j<contourFinder.blobs[i].nPts; j++ ) {
-                mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
-                ofVertex( mapPt.x, mapPt.y );
-            }
-            ofEndShape();
-            
-            
-            //Mystery decides how many extra divisions between sketchy lines
-            for (int k = 1; k<ofMap(mystery, 0.0, 1.0, 1, 30); k++) {
-                color.setHsb(i*k*5, 255, 255);
-                ofSetColor(color);
-                
-                ofBeginShape();
-                ofSetLineWidth(lineThick*k*4);
-
-                for( int j=0; j<contourFinder.blobs[i].nPts; j+=k*4 ) {
-                    mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
-                    mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
-                ofVertex( mapPt.x, mapPt.y );
-                    
-                }
-                ofEndShape(); 
-            }
-             
-        } 
-        ofSetColor(255,255,255);
-
-    }
-    
-    //Connected centroids
-    if(counter==6){
-        MysteryConnect = ofMap(mystery, 0.0, 1.0, 50, 300);
-        for(int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
-            for (int j=0; j<(int)contourFinder.blobs.size(); j++ ) {
-                connectDist[i][j] = ofDist(ofMap(contourFinder.blobs[i].centroid.x,0, camWidth,0,ofGetWidth()),
-                                           ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight()),
-                                           ofMap(contourFinder.blobs[j].centroid.x,0, camWidth,0,ofGetWidth()),
-                                           ofMap(contourFinder.blobs[j].centroid.y,0,camHeight,0,ofGetHeight()));
-                blobConnect[i]=0;
-            }
-        }
-        for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
-            ofSetColor(ModColor,127);
-            mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,ofGetWidth());
-            mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight());
-            
-            for (int j=0; j<(int)contourFinder.blobs.size(); j++ ){
-                //Only draw lines if the distance between points is within that range
-                
-                if (connectDist [i][j] < MysteryConnect) {
-                    //ofMap(sin(ofGetElapsedTimef()), -1, 1, 50, 400)
-                    
-                    ofSetLineWidth(ofMap(connectDist[i][j], 0, MysteryConnect, .1, 6));
-                    blobConnect[i]++;
-                    ofSetColor(255,255,255, 160);
-                    ofLine(ofMap(contourFinder.blobs[j].centroid.x,0, camWidth,0,ofGetWidth()),
-                           ofMap(contourFinder.blobs[j].centroid.y,0,camHeight,0,ofGetHeight()),
-                           ofMap(contourFinder.blobs[i].centroid.x,0, camWidth,0,ofGetWidth()),
-                           ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight()));
-                    
-                    ofSetColor(ModColor, 200);
-
-                    ofFill();
-                    
-                    ofCircle(mapCent.x, mapCent.y, ofMap(blobConnect[i], 0, 10, 2, 20));
-                    
-                    //ofDrawBitmapString(ofToString(connectDist [i][j]), mapCent.x,mapCent.y);
-                    
-                }
-            }                
-        } 
-
-    }*/
+     //Color blobs
+     if(counter==5){
+     for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
+     ofNoFill();
+     ofSetLineWidth(lineThick);
+     ofBeginShape();
+     for( int j=0; j<contourFinder.blobs[i].nPts; j++ ) {
+     mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
+     mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+     ofVertex( mapPt.x, mapPt.y );
+     }
+     ofEndShape();
+     
+     
+     //Mystery decides how many extra divisions between sketchy lines
+     for (int k = 1; k<ofMap(mystery, 0.0, 1.0, 1, 30); k++) {
+     color.setHsb(i*k*5, 255, 255);
+     ofSetColor(color);
+     
+     ofBeginShape();
+     ofSetLineWidth(lineThick*k*4);
+     
+     for( int j=0; j<contourFinder.blobs[i].nPts; j+=k*4 ) {
+     mapPt.x=ofMap(contourFinder.blobs[i].pts[j].x,0,camWidth,0,ofGetWidth());
+     mapPt.y=ofMap(contourFinder.blobs[i].pts[j].y,0,camHeight,0,ofGetHeight());
+     ofVertex( mapPt.x, mapPt.y );
+     
+     }
+     ofEndShape();
+     }
+     
+     }
+     ofSetColor(255,255,255);
+     
+     }
+     
+     //Connected centroids
+     if(counter==6){
+     MysteryConnect = ofMap(mystery, 0.0, 1.0, 50, 300);
+     for(int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
+     for (int j=0; j<(int)contourFinder.blobs.size(); j++ ) {
+     connectDist[i][j] = ofDist(ofMap(contourFinder.blobs[i].centroid.x,0, camWidth,0,ofGetWidth()),
+     ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight()),
+     ofMap(contourFinder.blobs[j].centroid.x,0, camWidth,0,ofGetWidth()),
+     ofMap(contourFinder.blobs[j].centroid.y,0,camHeight,0,ofGetHeight()));
+     blobConnect[i]=0;
+     }
+     }
+     for( int i=0; i<(int)contourFinder.blobs.size(); i++ ) {
+     ofSetColor(ModColor,127);
+     mapCent.x = ofMap(contourFinder.blobs[i].centroid.x,0,camWidth,0,ofGetWidth());
+     mapCent.y = ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight());
+     
+     for (int j=0; j<(int)contourFinder.blobs.size(); j++ ){
+     //Only draw lines if the distance between points is within that range
+     
+     if (connectDist [i][j] < MysteryConnect) {
+     //ofMap(sin(ofGetElapsedTimef()), -1, 1, 50, 400)
+     
+     ofSetLineWidth(ofMap(connectDist[i][j], 0, MysteryConnect, .1, 6));
+     blobConnect[i]++;
+     ofSetColor(255,255,255, 160);
+     ofLine(ofMap(contourFinder.blobs[j].centroid.x,0, camWidth,0,ofGetWidth()),
+     ofMap(contourFinder.blobs[j].centroid.y,0,camHeight,0,ofGetHeight()),
+     ofMap(contourFinder.blobs[i].centroid.x,0, camWidth,0,ofGetWidth()),
+     ofMap(contourFinder.blobs[i].centroid.y,0,camHeight,0,ofGetHeight()));
+     
+     ofSetColor(ModColor, 200);
+     
+     ofFill();
+     
+     ofCircle(mapCent.x, mapCent.y, ofMap(blobConnect[i], 0, 10, 2, 20));
+     
+     //ofDrawBitmapString(ofToString(connectDist [i][j]), mapCent.x,mapCent.y);
+     
+     }
+     }
+     }
+     
+     }*/
     
     
     if (addBlend) {
@@ -760,52 +784,52 @@ void testApp::draw(){
     ofPopMatrix();
     
     //STOP ROTATION
-
+    
     //Experimental thresholder images
     //Make this a variable value
     if (snapSpecial && threshCounter < exposure+1) {
-        fboNew.end(); 
+        fboNew.end();
         
         ofSetColor(255, 255, 255);
         //if([UIDevice currentDevice].orientation==3 || [UIDevice currentDevice].orientation==0){
         ofPushMatrix();
-            if(camState==0){ //If front camera
+        if(camState==0){ //If front camera
             ofRotateY(180);
             ofRotateZ(-180);
             ofTranslate(0,-640);
-            }
-            if(camState==0 && [UIDevice currentDevice].orientation==UIDeviceOrientationPortrait){ //If front camera
-               // ofRotateY(180);
-                ofRotateX(0);
-                ofTranslate(0,0); //DONE FIXED>>LEAVE IT! 
-            }
-            ofPushMatrix();
-            ofRotateZ(90);
-            ofTranslate(0, -1024);
-            ofSetColor(255, 255, 255);
-            fboNew.draw(0, 0); 
-            ofPopMatrix();
+        }
+        if(camState==0 && [UIDevice currentDevice].orientation==UIDeviceOrientationPortrait){ //If front camera
+            // ofRotateY(180);
+            ofRotateX(0);
+            ofTranslate(0,0); //DONE FIXED>>LEAVE IT!
+        }
+        ofPushMatrix();
+        //ofRotateZ(90);
+        //ofTranslate(0, -1024);
+        ofSetColor(255, 255, 255);
+        fboNew.draw(0, 0);
+        ofPopMatrix();
         ofPopMatrix();
         //}
         
         /*
-        if([UIDevice currentDevice].orientation==4 || [UIDevice currentDevice].orientation==0){
-            ofPushMatrix();
-            ofRotateZ(-90);
-            ofTranslate(-1024, 0);
-            ofSetColor(255, 255, 255);
-            fboNew.draw(0, 0); 
-            ofPopMatrix();
-        }
-        /*/
+         if([UIDevice currentDevice].orientation==4 || [UIDevice currentDevice].orientation==0){
+         ofPushMatrix();
+         ofRotateZ(-90);
+         ofTranslate(-1024, 0);
+         ofSetColor(255, 255, 255);
+         fboNew.draw(0, 0);
+         ofPopMatrix();
+         }
+         /*/
         threshold = ofMap(threshCounter, 0, exposure, 0, 255);
         //Currently this is not actually getting every thresh level because its happening twice per frame
         if (threshCounter==exposure) {
-            ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();  
-            ofxiPhoneScreenGrab(delegate); 
+            ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();
+            ofxiPhoneScreenGrab(delegate);
             snapSpecial = false;
-            fboNew.begin();  
-            ofClear(0, 0, 0, 0);  
+            fboNew.begin();
+            ofClear(0, 0, 0, 0);
             fboNew.end();
             threshold = 120;
             flashCounter = 255;
@@ -819,14 +843,14 @@ void testApp::draw(){
         
     }
     
-
-
+    
+    
     
     //TAKE A PICTURE
     if (snapPhoto) {
         snapPhoto = false;
-        ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();  
-        ofxiPhoneScreenGrab(delegate); 
+        ofxiPhoneAppDelegate * delegate = ofxiPhoneGetAppDelegate();
+        ofxiPhoneScreenGrab(delegate);
         flashCounter = 255;
         fadetimeSave = ofGetElapsedTimef();
     }
@@ -836,9 +860,9 @@ void testApp::draw(){
         flashCounter = ofClamp(ofMap(ofGetElapsedTimef(), fadetimeSave, fadetimeSave+3, 280,0),0,280);
         ofSetColor(255, 255, 255,flashCounter);
         ofFill();
-        ofRect(0, 0, ofGetWidth(), ofGetHeight());
+        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
         ofNoFill();
-        if ([UIDevice currentDevice].orientation == 3 || [UIDevice currentDevice].orientation == 2 || 
+        if ([UIDevice currentDevice].orientation == 3 || [UIDevice currentDevice].orientation == 2 ||
             [UIDevice currentDevice].orientation == 5 || [UIDevice currentDevice].orientation == 6 || [UIDevice currentDevice].orientation == 0) {
             ofSetColor(0, 0, 0, flashCounter );
             codePro.drawString("      Photo saved\n\nto your photo album!", 280,310);
@@ -850,7 +874,7 @@ void testApp::draw(){
             ofSetColor(0, 0, 0, flashCounter );
             codePro.drawString("      Photo saved\n\nto your photo album!", 280,310);
             ofPopMatrix();
-
+            
         }
         else if ([UIDevice currentDevice].orientation == 1) {
             ofPushMatrix();
@@ -859,33 +883,33 @@ void testApp::draw(){
             ofSetColor(0, 0, 0, flashCounter );
             codePro.drawString("      Photo saved\n\nto your photo album!", 100,350);
             ofPopMatrix();
-
+            
         }
     }
     
-
+    
     
     //---------Anything after this will NOT be captured by the snapshot_taker--------------------
     
     //Camera control interface
-    if( [UIDevice currentDevice].orientation == 3 || [UIDevice currentDevice].orientation == 2 || 
-        [UIDevice currentDevice].orientation == 5 || [UIDevice currentDevice].orientation == 6 || [UIDevice currentDevice].orientation == 0)
-        { //if either landscape, face down, face up, or unknow
+    if( [UIDevice currentDevice].orientation == 3 || [UIDevice currentDevice].orientation == 2 ||
+       [UIDevice currentDevice].orientation == 5 || [UIDevice currentDevice].orientation == 6 || [UIDevice currentDevice].orientation == 0)
+    { //if either landscape, face down, face up, or unknow
         if(myGuiViewController.view.hidden){
             ofFill();
             ofEnableAlphaBlending();
             ofSetColor(255, 255, 255,255);
             fullGui.draw(0,0,ofGetWidth(),ofGetHeight());
-
+            
             //camswitchIcon.draw(35,-15,150,150);
             ofSetColor(255, 255, 255);
             codePro.drawString(CurrentModeString, 240,600);
             if (snapSpecial) {
                 ofFill();
                 ofSetColor(255, 255, 255,90);
-                ofRect(240, 500, 520, 38);
+                ofDrawRectangle(240, 500, 520, 38);
                 ofSetColor(255, 255, 255,127);
-                ofRect(ofMap(threshold, 0, 255, 480, 240), 500, ofMap(threshold, 0, 255, 0, 520), 38);
+                ofDrawRectangle(ofMap(threshold, 0, 255, 480, 240), 500, ofMap(threshold, 0, 255, 0, 520), 38);
                 ofSetColor(0, 0, 0);
                 
                 if (threshold<245) {
@@ -899,7 +923,7 @@ void testApp::draw(){
         }
         //cout << "Landscape case"<<endl;
     }
-    else if( [UIDevice currentDevice].orientation == 4 ) { 
+    else if( [UIDevice currentDevice].orientation == 4 ) {
         if(myGuiViewController.view.hidden){
             ofPushMatrix();
             ofRotateZ(-180);
@@ -907,7 +931,7 @@ void testApp::draw(){
             ofFill();
             ofEnableAlphaBlending();
             ofSetColor(255, 255, 255,255);
-
+            
             fullGui.draw(0,0,ofGetWidth(),ofGetHeight());
             
             ofSetColor(255, 255, 255,100);
@@ -917,9 +941,9 @@ void testApp::draw(){
             if (snapSpecial) {
                 ofFill();
                 ofSetColor(255, 255, 255,90);
-                ofRect(240, 500, 520, 38);
+                ofDrawRectangle(240, 500, 520, 38);
                 ofSetColor(255, 255, 255,127);
-                ofRect(ofMap(threshold, 0, 255, 480, 240), 500, ofMap(threshold, 0, 255, 0, 520), 38);
+                ofDrawRectangle(ofMap(threshold, 0, 255, 480, 240), 500, ofMap(threshold, 0, 255, 0, 520), 38);
                 ofSetColor(0, 0, 0);
                 
                 if (threshold<245) {
@@ -944,18 +968,18 @@ void testApp::draw(){
             ofTranslate(-640, -0);
             ofFill();
             ofEnableAlphaBlending();
-
+            
             ofSetColor(255, 255, 255,255);
             
             codePro.drawString(CurrentModeString, 60,775);
             if (snapSpecial) {
                 ofFill();
                 ofSetColor(255, 255, 255,90);
-                ofRect(60, 700, 505, 38);
+                ofDrawRectangle(60, 700, 505, 38);
                 ofSetColor(255, 255, 255,127);
-                ofRect(ofMap(threshold, 0, 255, 320, 60), 700, ofMap(threshold, 0, 255, 0, 520), 38);
+                ofDrawRectangle(ofMap(threshold, 0, 255, 320, 60), 700, ofMap(threshold, 0, 255, 0, 520), 38);
                 ofSetColor(0, 0, 0);
-
+                
                 if (threshold<245) {
                     codePro.drawString("Hold still...Processing...", 80,730);
                 }
@@ -969,7 +993,7 @@ void testApp::draw(){
             fullGuiPortrait.draw(0,0,ofGetWidth(),ofGetHeight());
             //cout << "Portrait case"<<endl;
         }
-
+        
     }
     
     //RANDO-MIZER
@@ -996,17 +1020,16 @@ void testApp::draw(){
         loadScreen.draw(0,0,ofGetWidth(),ofGetHeight());
         loadFade=loadFade-7;
     }
-    
-} 
+}
 
 //--------------------------------------------------------------
-void testApp::touchDown(ofTouchEventArgs &touch){
+void ofApp::touchDown(ofTouchEventArgs &touch){
     
-    if([UIDevice currentDevice].orientation == 0 || 
-       [UIDevice currentDevice].orientation == 1 || 
+    if([UIDevice currentDevice].orientation == 0 ||
+       [UIDevice currentDevice].orientation == 1 ||
        [UIDevice currentDevice].orientation == 2 ||
-       [UIDevice currentDevice].orientation == 3 || 
-       [UIDevice currentDevice].orientation == 5 || 
+       [UIDevice currentDevice].orientation == 3 ||
+       [UIDevice currentDevice].orientation == 5 ||
        [UIDevice currentDevice].orientation == 6)
         {
             
@@ -1019,7 +1042,7 @@ void testApp::touchDown(ofTouchEventArgs &touch){
             }
             
             if (touch.x>0 && touch.x<150 && touch.y>0 && touch.y<160){
-                switchCamera();
+                //switchCamera();
             }
             /*if (touch.x>0 && touch.x<150 && touch.y>350 && touch.y<640){
                 if (flash) {
@@ -1101,47 +1124,44 @@ void testApp::touchDown(ofTouchEventArgs &touch){
 }
 
 //--------------------------------------------------------------
-void testApp::touchCancelled(ofTouchEventArgs &touch){
+void ofApp::touchCancelled(ofTouchEventArgs &touch){
 
 }
 
 //--------------------------------------------------------------
-void testApp::touchMoved(ofTouchEventArgs &touch){
+void ofApp::touchMoved(ofTouchEventArgs &touch){
     //Swipe for loc change
     loc.x = touch.x;
-    
     if(loc.x - compare.x > 0){        
         if((loc.x - compare.x) > 100){
             timer = ofGetElapsedTimeMillis();
-            if(counter < 6){
-                counter++;
-                modeChange = true;
-            }
-            else{
-                counter = 1;
-                modeChange = true;
-            }
+
+            counter++;
+            counter = ofWrap(counter,1,7);
+            modeChange = true;
         }
     }
     
     compare.x = loc.x;
+    
+    //cout<< touch<<endl;
 
 }
 
 //--------------------------------------------------------------
-void testApp::touchUp(ofTouchEventArgs &touch){
+void ofApp::touchUp(ofTouchEventArgs &touch){
 
 }
 
 //--------------------------------------------------------------
-void testApp::touchDoubleTap(ofTouchEventArgs &touch){
+void ofApp::touchDoubleTap(ofTouchEventArgs &touch){
    /* if( myGuiViewController.view.hidden ){
         myGuiViewController.view.hidden = NO;
     } */
     shufflin = true;
 }
 //--------------------------------------------------------------
-void testApp::changeOrientation(int newOrientation){
+void ofApp::changeOrientation(int newOrientation){
     
     //ALL of this shit was breaking the view controller for some reason..doing all rotations with OFTranslates now..
     switch (newOrientation) {
@@ -1165,7 +1185,7 @@ void testApp::changeOrientation(int newOrientation){
     
 }
 //--------------------------------------------------------------
-void testApp::updateGUIvalues(){
+void ofApp::updateGUIvalues(){
     myGuiViewController.GUIbackground.on = backSwitch;
     myGuiViewController.GUIblackwhite.on = BWSwitch;
     myGuiViewController.GUImysterySw.on = mysterySwitch;
@@ -1180,7 +1200,7 @@ void testApp::updateGUIvalues(){
 }
 
 //--------------------------------------------------------------
-void testApp::switchCamera(){
+void ofApp::switchCamera(){
     
     if (camState==0) {
         vidGrabber.close();
@@ -1225,7 +1245,7 @@ void testApp::switchCamera(){
 
 }
 
-void testApp::exit(){
+void ofApp::exit(){
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
 

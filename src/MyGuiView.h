@@ -7,7 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-#include "testApp.h"
+#include "ofApp.h"
 
 @interface MyGuiView : UIViewController {
 	IBOutlet UILabel *displayText;
@@ -25,7 +25,7 @@
     
     IBOutlet UISwitch *updateVals;
     
-	testApp *myApp;		// points to our instance of testApp
+	ofApp *myApp;		// points to our instance of testApp
 }
 
 @property (nonatomic, retain) IBOutlet UISlider *GUIthickness; 
